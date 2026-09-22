@@ -5,7 +5,7 @@ import pandas as pd
 # Dashboard Cursos Escola Nova Geração
 # ---------------------------------------------
  
-st.title(" Dashboard de Pedidos - Delivery")
+st.title(" Dashboard Cursos - Escola Nova Geração")
  
 # 1. Criando a base de dados
 dados = {
@@ -23,19 +23,19 @@ df = pd.DataFrame(dados)
 st.sidebar.title("Filtros")
  
 categoria_escolhida = st.sidebar.selectbox(
-    "Categoria:",
+    "categoria:",
     ["Todas"] + list(df["categoria"].unique())
 )
  
 valor_maximo = st.sidebar.slider(
-    "Valor máximo do pedido (R$):",
-    min_value=float(df["valor"].min()),
-    max_value=float(df["valor"].max()),
-    value=float(df["valor"].max())
+    "Valor máximo do mensalidade (R$):",
+    min_value=float(df["mensalidade"].min()),
+    max_value=float(df["mensalidade"].max()),
+    value=float(df["mensalidade"].max())
 )
  
 # 3. Aplicando os filtros
-df_filtrado = df[df["valor"] <= valor_maximo]
+df_filtrado = df[df["mensalidade"] <= valor_maximo]
  
 if categoria_escolhida != "Todas":
     df_filtrado = df_filtrado[df_filtrado["categoria"] == categoria_escolhida]
@@ -47,7 +47,7 @@ st.dataframe(df_filtrado)
 # 5. Métricas
 col1, col2 = st.columns(2)
  
-faturamento_total = df_filtrado["Mensalidade"].sum()
+faturamento_total = df_filtrado["mensalidade"].sum()
 avaliacao_media = df_filtrado["avaliacao"].mean() if len(df_filtrado) > 0 else 0
  
 col1.metric("Faturamento total", f"R$ {faturamento_total:.2f}")
@@ -57,7 +57,7 @@ col2.metric("Avaliação média", f"{avaliacao_media:.1f} ")
 st.subheader("Valor total por Curso")
  
 if len(df_filtrado) > 0:
-    valor_por_restaurante = df_filtrado.groupby("restaurante")["valor"].sum()
+    valor_por_restaurante = df_filtrado.groupby("curso")["mensalidade"].sum()
     st.bar_chart(valor_por_restaurante)
 else:
     st.write("Nenhum curso encontrado com esse filtro.")
